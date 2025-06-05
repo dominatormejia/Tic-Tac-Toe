@@ -74,15 +74,60 @@ function createPlayer(name, marker) {
   return { name, marker };
 }
 
-const dom = createPlayer("dom", "X");
-const ryan = createPlayer("ryan", "O");
+const turnController = (function () {
+  const box = document.querySelectorAll(".box");
+  let turn = "X";
+  const changeTurn = function () {
+    turn = turn === "X" ? "O" : "X";
+  };
 
-Gameboard.choiceInput(ryan, 1);
-Gameboard.choiceInput(dom, 2);
-Gameboard.choiceInput(ryan, 3);
-Gameboard.choiceInput(dom, 5);
-Gameboard.choiceInput(dom, 6);
-Gameboard.choiceInput(dom, 9);
-Gameboard.choiceInput(ryan, 4);
-Gameboard.choiceInput(dom, 7);
-Gameboard.choiceInput(ryan, 8);
+  const getTurn = function () {
+    return turn;
+  };
+
+  box.forEach((element) => {
+    element.addEventListener("click", (e) => {
+      if (element.classList.contains("clicked")) {
+        return;
+      } else if (getTurn() === "X") {
+        element.style.backgroundColor = "red";
+        element.classList.add("clicked");
+        alert(`${element.id}`);
+      } else if (getTurn() === "O") {
+        element.style.backgroundColor = "green";
+        element.classList.add("clicked");
+        alert(`${element.id}`);
+      }
+      changeTurn();
+    });
+  });
+})();
+
+const playerOne = createPlayer("dom", "X");
+const playerTwo = createPlayer("ryan", "O");
+
+Gameboard.choiceInput(playerTwo, 1);
+Gameboard.choiceInput(playerOne, 2);
+
+const inputOne = document.querySelector("#playerOne");
+const inputTwo = document.querySelector("#playerTwo");
+
+const form = document.querySelectorAll("form");
+
+form.forEach((element) => {
+  element.addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+});
+
+function myFunction() {
+  const placeholderOne = document.forms["playerOne"]["playerOne"].value;
+  console.log(placeholderOne);
+}
+
+function myFunctionTwo() {
+  const placeholderTwo = document.forms["playerTwo"]["playerTwo"].value;
+  console.log(placeholderTwo);
+}
+inputOne.addEventListener("change", myFunction);
+inputTwo.addEventListener("change", myFunctionTwo);

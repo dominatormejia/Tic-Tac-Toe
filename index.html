@@ -15,16 +15,38 @@
   </head>
   <body>
     <h1>Tic Tac Toe</h1>
+    <button type="submit" form="">Start Game</button>
+
+    <div class="form">
+      <form action="" method="post" name="playerOne">
+        <label for="playerOne">Player One: ❌</label>
+        <input
+          type="text"
+          name="playerOne"
+          id="playerOne"
+          placeholder="Player One Name"
+        />
+      </form>
+      <form action="" method="post" class="form-right" name="playerTwo">
+        <label for="playerTwo">Player Two: ⭕</label>
+        <input
+          type="text"
+          name="playerTwo"
+          id="playerTwo"
+          placeholder="Player Two Name"
+        />
+      </form>
+    </div>
     <div class="wrapper">
-      <div class="box right bottom">box1</div>
-      <div class="box bottom">box2</div>
-      <div class="box left bottom">box3</div>
-      <div class="box right bottom">box4</div>
-      <div class="box bottom">box5</div>
-      <div class="box left bottom">box6</div>
-      <div class="box right">box7</div>
-      <div class="box">box8</div>
-      <div class="box left">box9</div>
+      <div class="box right bottom" id="1">box1</div>
+      <div class="box bottom" id="2">box2</div>
+      <div class="box left bottom" id="3">box3</div>
+      <div class="box right bottom" id="4">box4</div>
+      <div class="box bottom" id="5">box5</div>
+      <div class="box left bottom" id="6">box6</div>
+      <div class="box right" id="7">box7</div>
+      <div class="box" id="8">box8</div>
+      <div class="box left" id="9">box9</div>
     </div>
   </body>
 </html>

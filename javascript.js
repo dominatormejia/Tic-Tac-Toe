@@ -1,5 +1,5 @@
 const Gameboard = (function () {
-  const gameboard = [];
+  let gameboard = [];
 
   const choiceInput = (player, input) => {
     const duplicate = gameboard.some((array) => array.position === input);
@@ -60,23 +60,41 @@ const Gameboard = (function () {
   };
 
   const displayResult = (result, player) => {
+    const announcement = document.querySelector(".announcements");
+
     if (result === "win") {
       console.log("The winner " + "is" + " " + player.name);
+      announcement.textContent = `The winner is ${player.name}`;
+      announcement.style.color = "green";
     } else {
       console.log("It is a tie");
+      announcement.textContent = "It is a tie";
     }
   };
-
-  return { choiceInput };
+  const clearFunc = function () {
+    gameboard = [];
+  };
+  return { choiceInput, clearFunc };
 })();
 
 function createPlayer(name, marker) {
   return { name, marker };
 }
 
-const turnController = (function () {
+const displayBoard = (function () {
+  const inputOne = document.querySelector("#playerOne");
+  const inputTwo = document.querySelector("#playerTwo");
+  const formOne = document.forms["playerOne"];
+  const formTwo = document.forms["playerTwo"];
+  const form = document.querySelectorAll("form");
   const box = document.querySelectorAll(".box");
+  const button = document.querySelector("button");
+  const announcement = document.querySelector(".announcements");
+
   let turn = "X";
+  let playerOne = null;
+  let playerTwo = null;
+
   const changeTurn = function () {
     turn = turn === "X" ? "O" : "X";
   };
@@ -85,49 +103,93 @@ const turnController = (function () {
     return turn;
   };
 
+  const reset = function () {
+    turn = "X";
+    playerOne = null;
+    playerTwo = null;
+    inputOne.value = "";
+    inputTwo.value = "";
+    announcement.textContent = "Enter Player Names and Start Playing";
+    announcement.style.color = "black";
+
+    box.forEach((element) => {
+      const createdDivs = element.querySelectorAll(".created");
+
+      createdDivs.forEach((div) => {
+        element.removeChild(div);
+      });
+
+      element.classList.remove("clicked");
+    });
+  };
+
+  form.forEach((element) => {
+    element.addEventListener("submit", (e) => {
+      e.preventDefault();
+    });
+  });
+  inputOne.addEventListener("change", () => {
+    const name = formOne["playerOne"].value;
+    playerOne = createPlayer(name, "X");
+    console.log(playerOne);
+  });
+
+  inputTwo.addEventListener("change", () => {
+    const name = formTwo["playerTwo"].value;
+    playerTwo = createPlayer(name, "O");
+    console.log(playerTwo);
+  });
+
   box.forEach((element) => {
-    element.addEventListener("click", (e) => {
-      if (element.classList.contains("clicked")) {
+    element.addEventListener("click", () => {
+      if (
+        announcement.textContent != "Enter Player Names and Start Playing" &&
+        announcement.textContent != "Please input names"
+      ) {
+        return;
+      } else if (element.classList.contains("clicked")) {
+        return;
+      } else if (playerOne === null || playerTwo === null) {
+        console.log("Please input names");
+        announcement.textContent = "Please input names";
+        announcement.style.color = "red";
         return;
       } else if (getTurn() === "X") {
-        element.style.backgroundColor = "red";
+        const createDiv = document.createElement("div");
+        createDiv.textContent = "X";
+        createDiv.style.color = "green";
+        createDiv.classList.add("created");
+        element.appendChild(createDiv);
         element.classList.add("clicked");
-        alert(`${element.id}`);
+        Gameboard.choiceInput(playerOne, element.id);
+        console.log(element.id);
       } else if (getTurn() === "O") {
-        element.style.backgroundColor = "green";
+        const createDiv = document.createElement("div");
+        createDiv.textContent = "O";
+        createDiv.style.color = "red";
+        createDiv.classList.add("created");
+        element.appendChild(createDiv);
         element.classList.add("clicked");
-        alert(`${element.id}`);
+        Gameboard.choiceInput(playerTwo, element.id);
+        console.log(element.id);
       }
       changeTurn();
     });
   });
-})();
 
-const playerOne = createPlayer("dom", "X");
-const playerTwo = createPlayer("ryan", "O");
-
-Gameboard.choiceInput(playerTwo, 1);
-Gameboard.choiceInput(playerOne, 2);
-
-const inputOne = document.querySelector("#playerOne");
-const inputTwo = document.querySelector("#playerTwo");
-
-const form = document.querySelectorAll("form");
-
-form.forEach((element) => {
-  element.addEventListener("submit", (e) => {
-    e.preventDefault();
+  button.addEventListener("click", () => {
+    if (button.textContent === "Start Game") {
+      button.textContent = "Restart";
+      formOne.classList.remove("hidden");
+      formTwo.classList.remove("hidden");
+      announcement.classList.remove("hidden");
+    } else {
+      button.textContent = "Start Game";
+      formOne.classList.add("hidden");
+      formTwo.classList.add("hidden");
+      announcement.classList.add("hidden");
+      Gameboard.clearFunc();
+      reset();
+    }
   });
-});
-
-function myFunction() {
-  const placeholderOne = document.forms["playerOne"]["playerOne"].value;
-  console.log(placeholderOne);
-}
-
-function myFunctionTwo() {
-  const placeholderTwo = document.forms["playerTwo"]["playerTwo"].value;
-  console.log(placeholderTwo);
-}
-inputOne.addEventListener("change", myFunction);
-inputTwo.addEventListener("change", myFunctionTwo);
+})();

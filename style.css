@@ -86,12 +86,15 @@ h1 {
 .wrapper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  background-color: red;
+  grid-template-rows: repeat(3, 185px);
   width: 75vw;
   height: 75vh;
 }
 
 .box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 5px;
   background-color: #faf9f6;
 }
@@ -139,8 +142,29 @@ button {
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
+  margin-top: 25px;
+  width: 150px;
 }
 
 button:hover {
   background-color: lightblue;
+}
+
+div.announcements {
+  font-size: 1.3rem;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.created {
+  font-size: 4rem;
+}
+
+label[for="playerTwo"] {
+  color: red;
+}
+label[for="playerOne"] {
+  color: green;
 }
